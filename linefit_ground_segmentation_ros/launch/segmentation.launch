@@ -20,4 +20,13 @@
     <param name="all_points_topic" value="/vstr/all_points" />
   </node>
 
+  <!-- Ground segmentation, LUMINAR -->
+  <node name="ground_segmentation_luminar" pkg="linefit_ground_segmentation_ros" type="ground_segmentation_node" output="screen">
+    <rosparam command="load" file="$(find linefit_ground_segmentation_ros)/launch/segmentation_params.yaml"/>
+    <param name="input_topic" value="/luminar_pointcloud" />
+    <param name="ground_output_topic" value="/luminar/ground_cloud" />
+    <param name="obstacle_output_topic" value="/luminar/obstacle_cloud" />
+    <param name="all_points_topic" value="/luminar/all_points" />
+  </node>
+
 </launch>
