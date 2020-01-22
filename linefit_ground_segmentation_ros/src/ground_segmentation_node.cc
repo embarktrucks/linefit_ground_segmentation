@@ -67,7 +67,7 @@ class SegmentationNode
 
   void scanCallback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
   {
-    pcl::PointCloud<velodyne_pointcloud::PointXYZIR> cloud;
+    pcl::PointCloud<velodyne_pointcloud::PointXYZITLaserR> cloud;
     pcl::fromROSMsg(*cloud_msg, cloud);
 
     // Look up transform to vehicle_frame
@@ -87,7 +87,7 @@ class SegmentationNode
     // Remove duplicates
     size_t num_duplicates = 0;
     std::set<std::tuple<float, float, float>> pnts_set;
-    pcl::PointCloud<velodyne_pointcloud::PointXYZIR> pruned_cloud;
+    pcl::PointCloud<velodyne_pointcloud::PointXYZITLaserR> pruned_cloud;
 
     for (const auto& p : cloud.points) {
       // Remove points on the truck
@@ -121,7 +121,7 @@ class SegmentationNode
       float cs = std::cos(azimuth);
       float sn = std::sin(azimuth);
       for (float r : fake_r) {
-        velodyne_pointcloud::PointXYZIR fake_p;
+        velodyne_pointcloud::PointXYZITLaserR fake_p;
         fake_p.x = r * cs;
         fake_p.y = r * sn;
         fake_p.z = -params_.sensor_height;
@@ -138,8 +138,8 @@ class SegmentationNode
 
     segmenter.segment(pruned_cloud, &labels);
 
-    pcl::PointCloud<velodyne_pointcloud::PointXYZIR> ground_cloud;
-    pcl::PointCloud<velodyne_pointcloud::PointXYZIR> obstacle_cloud;
+    pcl::PointCloud<velodyne_pointcloud::PointXYZITLaserR> ground_cloud;
+    pcl::PointCloud<velodyne_pointcloud::PointXYZITLaserR> obstacle_cloud;
     all_points->clear();
 
     ground_cloud.header = pruned_cloud.header;

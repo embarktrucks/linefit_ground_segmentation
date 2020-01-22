@@ -58,7 +58,7 @@ struct GroundSegmentationParams
   int n_threads;
 };
 
-typedef velodyne_pointcloud::PointXYZIR Point;
+typedef velodyne_pointcloud::PointXYZITLaserR Point;
 typedef pcl::PointCloud<Point> PointCloud;
 typedef std::pair<Point, Point> PointLine;
 

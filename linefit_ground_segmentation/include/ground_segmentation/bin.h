@@ -41,7 +41,7 @@ class Bin
   /// \brief Fake copy constructor to allow vector<vector<Bin> > initialization.
   Bin(const Bin& segment);
 
-  void addPoint(const velodyne_pointcloud::PointXYZIR& point);
+  void addPoint(const velodyne_pointcloud::PointXYZITLaserR& point);
 
   void addPoint(const float& d, const float& z, const float& intensity, const uint16_t& ring);
 
