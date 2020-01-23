@@ -1,7 +1,7 @@
 #ifndef GROUND_SEGMENTATION_BIN_H_
 #define GROUND_SEGMENTATION_BIN_H_
 
-#include <velodyne_pointcloud/point_types.h>
+#include <utils/point_cloud/point_types.h>
 #include <atomic>
 
 class Bin
@@ -41,7 +41,7 @@ class Bin
   /// \brief Fake copy constructor to allow vector<vector<Bin> > initialization.
   Bin(const Bin& segment);
 
-  void addPoint(const velodyne_pointcloud::PointXYZITLaserR& point);
+  void addPoint(const PointXYZITLaser& point);
 
   void addPoint(const float& d, const float& z, const float& intensity, const uint16_t& ring);
 

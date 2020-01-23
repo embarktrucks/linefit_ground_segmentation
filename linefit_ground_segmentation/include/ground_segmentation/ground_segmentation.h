@@ -7,7 +7,8 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/visualization/pcl_visualizer.h>
-#include <velodyne_pointcloud/point_types.h>
+
+#include <utils/point_cloud/point_types.h>
 
 #include "ground_segmentation/segment.h"
 
@@ -58,7 +59,7 @@ struct GroundSegmentationParams
   int n_threads;
 };
 
-typedef velodyne_pointcloud::PointXYZITLaserR Point;
+typedef PointXYZITLaser Point;
 typedef pcl::PointCloud<Point> PointCloud;
 typedef std::pair<Point, Point> PointLine;
 

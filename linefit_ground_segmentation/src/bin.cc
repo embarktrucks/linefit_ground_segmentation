@@ -10,10 +10,10 @@ Bin::Bin(const Bin& bin) : min_z(std::numeric_limits<double>::max()), has_point_
 {
 }
 
-void Bin::addPoint(const velodyne_pointcloud::PointXYZITLaserR& point)
+void Bin::addPoint(const PointXYZITLaser& point)
 {
   const double d = sqrt(point.x * point.x + point.y * point.y);
-  addPoint(d, point.z, point.intensity, point.ring);
+  addPoint(d, point.z, point.intensity, point.laser_id);
 }
 
 void Bin::addPoint(const float& d, const float& z, const float& intensity, const uint16_t& ring)
