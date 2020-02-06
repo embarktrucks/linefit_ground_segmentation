@@ -77,7 +77,7 @@ Point GroundSegmentation::minZPointTo3d(const Bin::MinZPoint& min_z_point, const
   point.y = std::sin(angle) * min_z_point.d;
   point.z = min_z_point.z;
   point.intensity = min_z_point.intensity;
-  point.ring = min_z_point.ring;
+  point.laser_id = min_z_point.ring;
   return point;
 }
 
@@ -152,7 +152,7 @@ void GroundSegmentation::getMinZPoints(PointCloud* out_cloud)
         point.y = sin(angle) * min_z_point.d;
         point.z = min_z_point.z;
         point.intensity = min_z_point.intensity;
-        point.ring = min_z_point.ring;
+        point.laser_id = min_z_point.ring;
 
         out_cloud->push_back(point);
       }
@@ -201,12 +201,12 @@ void GroundSegmentation::insertionThread(const PointCloud& cloud, const size_t s
       const unsigned int segment_index = (angle + M_PI) / segment_step;
 
       segments_[segment_index == params_.n_segments ? 0 : segment_index][bin_index].addPoint(
-          range, point.z, point.intensity, point.ring);
+          range, point.z, point.intensity, point.laser_id);
 
       bin_index_[i] = std::make_pair(segment_index, bin_index);
     } else {
       bin_index_[i] = std::make_pair<int, int>(-1, -1);
     }
-    segment_coordinates_[i] = Bin::MinZPoint(range, point.z, point.intensity, point.ring);
+    segment_coordinates_[i] = Bin::MinZPoint(range, point.z, point.intensity, point.laser_id);
   }
 }

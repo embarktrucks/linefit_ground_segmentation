@@ -4,33 +4,32 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <tf2_eigen/tf2_eigen.h>
 #include <tf2_ros/transform_listener.h>
-#include <velodyne_pointcloud/point_types.h>
 
 #include "ground_segmentation/ground_segmentation.h"
 #include "utils/params/params.h"
 
 // Data for segmented cloud (label:= ground=1u / non ground=0u)
-struct PointXYZIRL
+struct PointXYZILaserL
 {
   PCL_ADD_POINT4D;                // quad-word XYZ
   float intensity;                ///< laser intensity reading
-  uint16_t ring;                  ///< laser ring number
+  uint16_t laser_id;                  ///< laser ring number
   uint16_t label;                 ///< point label
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW // ensure proper alignment
 } EIGEN_ALIGN16;
 
 // clang-format off
 // Register custom point struct according to PCL
-POINT_CLOUD_REGISTER_POINT_STRUCT(PointXYZIRL,
+POINT_CLOUD_REGISTER_POINT_STRUCT(PointXYZILaserL,
                                   (float, x, x)
                                   (float, y, y)
                                   (float, z, z)
                                   (float, intensity, intensity)
-                                  (uint16_t, ring, ring)
+                                  (uint16_t, laser_id, laser_id)
                                   (uint16_t, label, label))
 // clang-format on
 
-pcl::PointCloud<PointXYZIRL>::Ptr all_points(new pcl::PointCloud<PointXYZIRL>());
+pcl::PointCloud<PointXYZILaserL>::Ptr all_points(new pcl::PointCloud<PointXYZILaserL>());
 
 class SegmentationNode
 {
@@ -67,7 +66,7 @@ class SegmentationNode
 
   void scanCallback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
   {
-    pcl::PointCloud<velodyne_pointcloud::PointXYZIR> cloud;
+    pcl::PointCloud<PointXYZITLaser> cloud;
     pcl::fromROSMsg(*cloud_msg, cloud);
 
     // Look up transform to vehicle_frame
@@ -87,7 +86,7 @@ class SegmentationNode
     // Remove duplicates
     size_t num_duplicates = 0;
     std::set<std::tuple<float, float, float>> pnts_set;
-    pcl::PointCloud<velodyne_pointcloud::PointXYZIR> pruned_cloud;
+    pcl::PointCloud<PointXYZITLaser> pruned_cloud;
 
     for (const auto& p : cloud.points) {
       // Remove points on the truck
@@ -121,12 +120,12 @@ class SegmentationNode
       float cs = std::cos(azimuth);
       float sn = std::sin(azimuth);
       for (float r : fake_r) {
-        velodyne_pointcloud::PointXYZIR fake_p;
+        PointXYZITLaser fake_p;
         fake_p.x = r * cs;
         fake_p.y = r * sn;
         fake_p.z = -params_.sensor_height;
         fake_p.intensity = 0.0f;
-        fake_p.ring = 0u;
+        fake_p.laser_id = 0u;
         pruned_cloud.points.push_back(fake_p);
       }
     }
@@ -138,8 +137,8 @@ class SegmentationNode
 
     segmenter.segment(pruned_cloud, &labels);
 
-    pcl::PointCloud<velodyne_pointcloud::PointXYZIR> ground_cloud;
-    pcl::PointCloud<velodyne_pointcloud::PointXYZIR> obstacle_cloud;
+    pcl::PointCloud<PointXYZITLaser> ground_cloud;
+    pcl::PointCloud<PointXYZITLaser> obstacle_cloud;
     all_points->clear();
 
     ground_cloud.header = pruned_cloud.header;
@@ -148,12 +147,12 @@ class SegmentationNode
     all_points->points.reserve(num_acutal_pnts);
 
     for (size_t i = 0; i < num_acutal_pnts; ++i) {
-      PointXYZIRL pnt;
+      PointXYZILaserL pnt;
       pnt.x = pruned_cloud[i].x;
       pnt.y = pruned_cloud[i].y;
       pnt.z = pruned_cloud[i].z;
       pnt.intensity = pruned_cloud[i].intensity;
-      pnt.ring = pruned_cloud[i].ring;
+      pnt.laser_id = pruned_cloud[i].laser_id;
       pnt.label = (labels[i] == 1 ? 1u : 0u);
       all_points->points.push_back(pnt);
 
