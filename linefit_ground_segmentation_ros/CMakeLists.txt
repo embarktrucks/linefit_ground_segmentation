@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(linefit_ground_segmentation_ros)
 
-find_program(CCACHE_FOUND ccache)
-if (CCACHE_FOUND)
-set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE /home/embark/scratch/xcache/client/xcache_client)
-endif(CCACHE_FOUND)
+find_program(XCACHE_FOUND xcache_client)
+if (XCACHE_FOUND)
+set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE xcache_client)
+endif(XCACHE_FOUND)
 
 
 set(ROS_COMPONENTS message_generation message_runtime rosbag roscpp tf linefit_ground_segmentation tf2_ros tf2_eigen utils velodyne_pointcloud)

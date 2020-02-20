@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(linefit_ground_segmentation)
 
-find_program(CCACHE_FOUND ccache)
-if (CCACHE_FOUND)
-set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE /home/embark/scratch/xcache/client/xcache_client)
-endif(CCACHE_FOUND)
+find_program(XCACHE_FOUND xcache_client)
+if (XCACHE_FOUND)
+set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE xcache_client)
+endif(XCACHE_FOUND)
 
 
 find_package(catkin COMPONENTS roscpp velodyne_pointcloud)
