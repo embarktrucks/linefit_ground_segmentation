@@ -8,7 +8,7 @@ set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
 endif(CCACHE_FOUND)
 
 
-find_package(catkin COMPONENTS roscpp velodyne_pointcloud)
+find_package(catkin COMPONENTS roscpp velodyne_pointcloud utils_point_cloud)
 
 add_definitions(-std=c++11)
 

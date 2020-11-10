@@ -11,6 +11,7 @@
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
   <depend>velodyne_pointcloud</depend>
+  <depend>utils_point_cloud</depend>
   <!-- <buildtool_depend>catkin_simple</buildtool_depend> -->
   
 </package>
